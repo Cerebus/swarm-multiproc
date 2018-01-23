@@ -18,7 +18,6 @@ RUN apk update \
     && echo "${USER} ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers \
     && mkdir -p ${USER_SSH} \
     && passwd -u ${USER} \
-    && chown -R ${USER}:${USER} ${USER_HOME} \
     && mkdir -p ${WORKDIR} \
     && chown -R ${USER}:${USER} ${WORKDIR} \
     && echo "cd ${WORKDIR}" >> ${USER_HOME}/.profile \
@@ -29,13 +28,12 @@ RUN apk update \
     && sed -i "s/#AuthorizedKeysFile/AuthorizedKeysFile/g" /etc/ssh/sshd_config 
 
 COPY get_hosts /usr/local/bin/get_hosts
-
-WORKDIR ${WORKDIR}
-USER ${USER}
-
 COPY ssh/ ${USER_SSH}/
 
-USER root
-EXPOSE 2222
+RUN chown -R ${USER}:${USER} ${USER_HOME} 
 
-CMD ["/usr/sbin/sshd", "-D", "-p 2222"]
+WORKDIR ${WORKDIR}
+
+USER root
+
+CMD ["/usr/sbin/sshd", "-D"]
