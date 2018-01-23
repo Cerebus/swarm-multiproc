@@ -1,0 +1,6 @@
+#!/bin/sh
+
+# SERVICE_NAME is passed to the container environment by docker-compose
+
+( getent ahosts ${SERVICE_NAME} | cut -d' ' -f1 | uniq -d ) | sort -u
+
