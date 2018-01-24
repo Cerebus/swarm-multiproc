@@ -7,3 +7,12 @@ FROM cerebus2/swarm-multiproc:base
 LABEL maintainer="" \
       description=""
 
+ARG REQUIRE=""
+
+WORKDIR ${WORKDIR}
+
+RUN apk update \
+    && apk upgrade \
+    && apk add --no-cache ${REQUIRE} \
+    && pip install --no-cache -r /project/requirements.txt
+

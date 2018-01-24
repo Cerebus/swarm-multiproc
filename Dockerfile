@@ -19,7 +19,7 @@ LABEL maintainer="cerebus2@gmail.com" \
 # USER_HOME: default user home directory
 # USER_SSH: default user SSH directory
 
-ARG REQUIRE="sudo openssh build-base"
+ARG REQUIRE="sudo openssh"
 ARG USER=worker
 ARG WORKDIR=/project
 ARG USER_HOME=/home/${USER}
@@ -72,8 +72,7 @@ COPY get_hosts /usr/local/bin/get_hosts
 ONBUILD COPY project/ ${WORKDIR}/
 ONBUILD COPY ssh/ ${USER_SSH}/
 
-ONBUILD RUN chown -R ${USER}:${USER} ${USER_HOME} \
-	&& pip install --no-cache-dir -r /project/requirements.txt
+ONBUILD RUN chown -R ${USER}:${USER} ${USER_HOME}
 
 WORKDIR ${WORKDIR}
 
